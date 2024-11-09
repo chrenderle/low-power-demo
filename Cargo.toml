@@ -1,0 +1,43 @@
+[package]
+edition = "2021"
+name = "low-power-demo"
+version = "0.1.0"
+license = "MIT OR Apache-2.0"
+
+[features]
+low-power = ["embassy-stm32/low-power"]
+debug-during-sleep = ["low-power"]
+
+[dependencies]
+# Change stm32l552ze to your chip name, if necessary.
+embassy-stm32 = { version = "0.1.0", features = [ "defmt", "unstable-pac", "stm32u575zi", "time-driver-lptim1", "exti", "memory-x"]  }
+#embassy-stm32 = { version = "0.1.0", features = [ "defmt", "unstable-pac", "stm32u575zi", "time-driver-tim2", "exti", "memory-x"]  }
+embassy-sync = { version = "0.6", features = ["defmt"] }
+embassy-executor = { version = "0.6", features = ["arch-cortex-m", "executor-thread", "defmt", "integrated-timers"] }
+#embassy-time = { version = "0.3", features = ["defmt", "defmt-timestamp-uptime", "tick-hz-32_768"] }
+embassy-time = { version = "0.3", features = ["defmt", "defmt-timestamp-uptime", "tick-hz-1_000_000"] }
+embassy-futures = { version = "0.1" }
+
+defmt = "0.3"
+defmt-rtt = "0.4"
+panic-probe = { version = "0.3", features = ["print-defmt"] }
+
+cortex-m = { version = "0.7.6", features = ["inline-asm", "critical-section-single-core"] }
+cortex-m-rt = "0.7.0"
+embedded-hal = "0.2.6"
+futures = { version = "0.3.17", default-features = false, features = ["async-await"] }
+heapless = { version = "0.8", default-features = false }
+rand_core = { version = "0.6.3", default-features = false }
+embedded-io-async = { version = "0.6.1" }
+static_cell = "2"
+
+[profile.release]
+debug = 2
+
+[patch.crates-io]
+embassy-stm32 = { path = "../embassy/embassy-stm32" }
+embassy-sync = { path = "../embassy/embassy-sync" }
+embassy-executor = { path = "../embassy/embassy-executor" }
+embassy-time = { path = "../embassy/embassy-time" }
+embassy-futures = { path = "../embassy/embassy-futures" }
+embassy-embedded-hal = { path = "../embassy/embassy-embedded-hal" }
